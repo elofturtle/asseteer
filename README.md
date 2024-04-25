@@ -10,7 +10,7 @@ Det övergripande målet är att skapa en applikation för att hantera diverse t
 * Globala grupper <--> Teknisk applikation
 * CycloneDX & SPDX --> Säkerhetshantering, säka vem som använder vilket beroende
 * Tekniska applikationer, till exempel Chrome, vem äger den, var finns systemdokumentation, etc.
-## Iterationer (tänkt livscykel för applikaionen)
+## Iterationer (tänkt livscykel för applikationen)
 1 Enanvändarsystem utan db
   * Kan läsa & spara data i form av XML, CSV.
   * Sparar sitt globala state som XML
