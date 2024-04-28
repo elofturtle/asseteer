@@ -24,3 +24,4 @@ Det övergripande målet är att skapa en applikation för att hantera diverse t
 7 "rikig" deployment på extern server
 8 Fleranvändarstöd, sessionshantering, säkra att man inte skriver över varandras redigeringar.
 9 Behörighetshantering (admin/write/read)
+10 validera xml https://www.baeldung.com/java-validate-xml-xsd 
