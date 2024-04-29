@@ -36,6 +36,13 @@ Kunna mata in, söka, lista, redigera, utgå från tidigare information om klien
 
 Grundläggande konfiguration för applikationen (hårdkodat, tex var leta efter xml:er för cyclonedx) så att man slipper ange det på kommandoraden
 
+
+# Länkar
+## SoftWare IDentification Tag (SWID)
+https://scribesecurity.com/blog/spdx-vs-cyclonedx-sbom-formats-compared/
+https://pages.nist.gov/swid-tools/
+https://github.com/Labs64/swid-generator
+https://github.com/swidtags/rpm2swidtag/tree/master
 Spara state och hantera ev identisk information som ligger i mapp som läses in (är det sparat state eller indatat som gäller i vilken ordning?)
 
 globala grupper p.s.s. som för klientappliaktioner.
