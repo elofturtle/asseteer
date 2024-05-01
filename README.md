@@ -36,6 +36,29 @@ Kunna mata in, söka, lista, redigera, utgå från tidigare information om klien
 
 Grundläggande konfiguration för applikationen (hårdkodat, tex var leta efter xml:er för cyclonedx) så att man slipper ange det på kommandoraden
 
+```mermaid
+classDiagram
+Asset <|-- SBOM
+    Asset <|-- Programvara
+    Asset <|-- Licens
+    Asset "0..n" *-- Dependency : dependencies
+
+Dependency
+
+    <<abstract>> Asset
+    class Asset{
+        -String name
+        -Dependency[] dependencies
+        +String getUUID()
+        +String getName()
+        +void setName(Sring name)
+        +int compareTo(Asset o)
+    }
+class Dependency{
+    -String UUID
+}
+```
+
 
 # Länkar
 ## SoftWare IDentification Tag (SWID)
