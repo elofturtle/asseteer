@@ -1,0 +1,21 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.elofturtle.asseteer</groupId>
+  <artifactId>asseteer</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Asseteer</name>
+  <description>Asseteer is a simple asset management utlility</description>
+  <url>https://github.com/elofturtle/asseteer</url>
+  <scm>
+  	<url>https://github.com/elofturtle/asseteer.git</url>
+  	<developerConnection>elofturtle</developerConnection>
+  </scm>
+  <dependencies>
+	<dependency>
+	  	<groupId>org.cyclonedx</groupId>
+	  	<artifactId>cyclonedx-core-java</artifactId>
+	  	<version>8.0.3</version>
+	  </dependency>
+  </dependencies>
+  
+</project>
