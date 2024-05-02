@@ -2,6 +2,7 @@ package com.elofturtle.asseteer;
 
 import org.cyclonedx.BomParserFactory;
 import org.cyclonedx.exception.ParseException;
+import org.cyclonedx.model.Component;
 import org.cyclonedx.parsers.Parser;
 import java.io.File;
 
@@ -12,12 +13,20 @@ public class CycloneDXSBOM {
 	 try {
 		 org.cyclonedx.parsers.Parser parser =  BomParserFactory.createParser(file);
 		 org.cyclonedx.model.Bom bom = parser.parse(file);
-		 for (var component : bom.getComponents() )
-		 System.out.println(component.getName());
-
+		 System.out.println(bom.getMetadata().getComponent().getName() + " : " + bom.getMetadata().getComponent().getType());
+		 for (var component : bom.getComponents() ) {
+			 System.out.println(component.getPurl());
+			 if(component.getType() == Component.Type.LIBRARY) {
+				 System.out.println(component.getName() + " : " + component.getType());
+			 }else {
+				 System.out.println(component.getName());
+			 }
+		 }
 	} catch (ParseException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	 
+	 
  } 
 }

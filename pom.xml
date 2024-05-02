@@ -10,12 +10,60 @@
   	<url>https://github.com/elofturtle/asseteer.git</url>
   	<developerConnection>elofturtle</developerConnection>
   </scm>
+  
   <dependencies>
 	<dependency>
 	  	<groupId>org.cyclonedx</groupId>
-	  	<artifactId>cyclonedx-core-java</artifactId>
+	  	<artifactId>cyclonedx-core-java</artifactId> <!-- Parsa dokument i cdx-formatet -->
 	  	<version>8.0.3</version>
 	  </dependency>
+	  <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+	 <dependency>
+	    <groupId>org.junit.jupiter</groupId> <!-- Skriva fina testfall. Tydligen mer modulärt i 5.x så flera beroenden. -->
+	    <artifactId>junit-jupiter-api</artifactId>
+	    <version>5.11.0-M1</version>
+	    <scope>test</scope>
+	 </dependency>
+	 <dependency>
+	<groupId>org.junit.jupiter</groupId>
+	<artifactId>junit-jupiter-engine</artifactId>
+	<version>5.2.0</version>
+	<scope>test</scope>
+</dependency>
+<dependency>
+	<groupId>org.junit.platform</groupId>
+	<artifactId>junit-platform-runner</artifactId>
+	<version>1.2.0</version>
+	<scope>test</scope>
+</dependency>
   </dependencies>
   
+  <properties>
+  	<maven.compiler.target>21</maven.compiler.target> <!-- vilken JDK siktar vi på? Annars bygger klagar mvn på att nya funktioner används. -->
+  	<maven.compiler.source>21</maven.compiler.source>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- Klagar på encoding annars -->
+  </properties>
+  <build>
+	  <plugins>
+		  <plugin>
+            <groupId>org.jacoco</groupId> <!-- Kodtäckningsrapporter, oklart om det är kaka på kaka mot junit (TODO: kolla) -->
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.5</version>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>prepare-agent</goal>
+                  </goals>
+               </execution>
+               <execution>
+                  <id>report</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>report</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+	  </plugins>
+  </build>
 </project>
