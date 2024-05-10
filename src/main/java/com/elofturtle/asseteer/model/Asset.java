@@ -9,7 +9,6 @@ public abstract class Asset implements Comparable<Asset> {
 	private String id;
 	private ArrayList<Dependency> dependencies;
 	
-	//public abstract String getUUID();
 	
 	public String getName() {
 		return name;
@@ -41,10 +40,12 @@ public abstract class Asset implements Comparable<Asset> {
 	}
 
 	public ArrayList<Dependency> getDependencies() {
+		// Möjliggör manipulering av internt state, borde kanske returnera en kopia.
 		return dependencies;
 	}
 
 	public void setDependencies(ArrayList<Dependency> dependencies) {
+		// Möjliggör manipulering av internt state, borde kanske kopiera istället.
 		this.dependencies = dependencies;
 	}
 	
@@ -63,6 +64,7 @@ public abstract class Asset implements Comparable<Asset> {
 	
 	public void removeDependency(Dependency d) {
 		dependencies.remove(d);
+		
 	}
 	
 	public void removeDependency(Asset a) {
@@ -78,6 +80,10 @@ public abstract class Asset implements Comparable<Asset> {
 		name = null;
 		dependencies = null;
 		//id = getUUID();
+	}
+	
+	public Dependency toDependency() {
+		return new Dependency(this);
 	}
 	
 	public Asset(String name, ArrayList<Dependency> dependencies) {
@@ -99,7 +105,7 @@ public abstract class Asset implements Comparable<Asset> {
 	public String toRepresentation() {
 		StringBuilder str = new StringBuilder();
 		str.append(name + " : " + id);
-		if(dependencies != null) {
+		if(dependencies != null && dependencies.size() != 0) {
 			str.append("\n\tDependencies\n");
 			for (var d : dependencies) {
 				str.append("\t\t" + d + "\n");

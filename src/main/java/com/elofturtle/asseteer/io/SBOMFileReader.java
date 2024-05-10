@@ -1,12 +1,13 @@
-package com.elofturtle.asseteer;
+package com.elofturtle.asseteer.io;
 
 import org.cyclonedx.BomParserFactory;
 import org.cyclonedx.exception.ParseException;
 import org.cyclonedx.model.Component;
 import org.cyclonedx.parsers.Parser;
-import java.io.File;
 
-public class CycloneDXSBOM {
+import java.io.File;
+//TODO: mappa fil till objekt och returnera.
+public class SBOMFileReader {
 	
  public static void main(String[] args) {
 	 File file = new File("proton-bridge-v1.6.3.bom.xml");
