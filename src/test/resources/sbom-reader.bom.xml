@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bom xmlns="http://cyclonedx.org/schema/bom/1.2" serialNumber="urn:uuid:836dad65-9f24-40ee-8074-71433055a058" version="1">
+ <!-- 
+ Expected representation after conversion:
+ scm.sfa.se/test/sbomReader : SBOM:pkg:scm.sfa.se/test/sbomReader@v1.0.0
+	Dependencies
+		SBOM:pkg:scm.sfa.se/test/a@v0.0.0
+		SBOM:pkg:scm.sfa.se/test/b@v0.0.1
+
+scm.sfa.se/test/a : SBOM:pkg:scm.sfa.se/test/a@v0.0.0
+scm.sfa.se/test/b : SBOM:pkg:scm.sfa.se/test/b@v0.0.1
+	Dependencies
+		SBOM:pkg:scm.sfa.se/test/c@v0.0.2
+
+scm.sfa.se/test/c : SBOM:pkg:scm.sfa.se/test/c@v0.0.2
+ -->
+  <metadata>
+    <timestamp>2021-05-16T17:07:43+02:00</timestamp>
+    <component bom-ref="pkg:golang/github.com/ProtonMail/proton-bridge@v1.6.3" type="application">
+      <name>scm.sfa.se/test/sbomReader</name>
+      <version>v1.0.0</version>
+      <purl>pkg:scm.sfa.se/test/sbomReader@v1.0.0</purl>
+    </component>
+  </metadata>
+  <components>
+    <component bom-ref="pkg:scm.sfa.se/test/a" type="library">
+      <name>scm.sfa.se/test/a</name>
+      <version>v0.0.0</version>
+      <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-256">8fd1da69f6a90db3db1910e4bba7bf1d1b3a28131c287896726d7ff526f19e5e</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>BSD-3-Clause</id>
+          <url>https://spdx.org/licenses/BSD-3-Clause.html</url>
+        </license>
+      </licenses>
+      <purl>pkg:scm.sfa.se/test/a@v0.0.0</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/0xAX/notificator</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component bom-ref="pkg:scm.sfa.se/test/b" type="library">
+      <name>scm.sfa.se/test/b</name>
+      <version>v0.0.1</version>
+      <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-256">8fd1da69f6a90db3db1910e4bba7bf1d1b3a28131c287896726d7ff526f19e5e</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>BSD-3-Clause</id>
+          <url>https://spdx.org/licenses/BSD-3-Clause.html</url>
+        </license>
+      </licenses>
+      <purl>pkg:scm.sfa.se/test/b@v0.0.1</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/0xAX/notificator</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component bom-ref="pkg:scm.sfa.se/test/c" type="library">
+      <name>scm.sfa.se/test/c</name>
+      <version>v0.0.2</version>
+      <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-256">8fd1da69f6a90db3db1910e4bba7bf1d1b3a28131c287896726d7ff526f19e5e</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>BSD-3-Clause</id>
+          <url>https://spdx.org/licenses/BSD-3-Clause.html</url>
+        </license>
+      </licenses>
+      <purl>pkg:scm.sfa.se/test/c@v0.0.2</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/0xAX/notificator</url>
+        </reference>
+      </externalReferences>
+    </component>
+    
+  </components>
+  <dependencies>
+    <dependency ref="pkg:scm.sfa.se/test/sbomReader@v1.0.0">
+		<dependency ref="pkg:scm.sfa.se/test/a@v0.0.0"></dependency>
+		<dependency ref="pkg:scm.sfa.se/test/b@v0.0.1"></dependency>
+	</dependency>
+	<dependency ref="pkg:scm.sfa.se/test/b@v0.0.1">
+		<dependency ref="pkg:scm.sfa.se/test/c@v0.0.2"></dependency>
+	</dependency>
+	<dependency ref="pkg:scm.sfa.se/test/c@v0.0.2"></dependency>
+  </dependencies>
+</bom>

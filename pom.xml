@@ -18,24 +18,34 @@
 	  	<version>8.0.3</version>
 	  </dependency>
 	  <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-	 <dependency>
-	    <groupId>org.junit.jupiter</groupId> <!-- Skriva fina testfall. Tydligen mer modulärt i 5.x så flera beroenden. -->
-	    <artifactId>junit-jupiter-api</artifactId>
-	    <version>5.11.0-M1</version>
-	    <scope>test</scope>
-	 </dependency>
-	 <dependency>
-	<groupId>org.junit.jupiter</groupId>
-	<artifactId>junit-jupiter-engine</artifactId>
-	<version>5.2.0</version>
-	<scope>test</scope>
-</dependency>
-<dependency>
-	<groupId>org.junit.platform</groupId>
-	<artifactId>junit-platform-runner</artifactId>
-	<version>1.2.0</version>
-	<scope>test</scope>
-</dependency>
+		 <dependency>
+		    <groupId>org.junit.jupiter</groupId> <!-- Skriva fina testfall. Tydligen mer modulärt i 5.x så flera beroenden. -->
+		    <artifactId>junit-jupiter-api</artifactId>
+		    <version>5.11.0-M1</version>
+		    <scope>test</scope>
+		 </dependency>
+		 <dependency>
+		<groupId>org.junit.jupiter</groupId>
+		<artifactId>junit-jupiter-engine</artifactId>
+		<version>5.2.0</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.junit.platform</groupId>
+		<artifactId>junit-platform-runner</artifactId>
+		<version>1.2.0</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+	    <groupId>org.jline</groupId>
+	    <artifactId>jline</artifactId>
+	    <version>3.20.0</version>  <!-- Check for the latest version on Maven Central -->
+	</dependency>
+	<dependency>
+	    <groupId>com.jcabi</groupId>
+	    <artifactId>jcabi-xml</artifactId>
+	    <version>0.22.2</version>
+	</dependency>
   </dependencies>
   
   <properties>
@@ -63,6 +73,13 @@
                   </goals>
                </execution>
             </executions>
+            <configuration>
+        <excludes>
+            <exclude>**/*Test.class</exclude> <!-- Slippa göra tester för testerna för testerna för testerna... -->
+            <exclude>**/Test*.class</exclude> 
+            <exclude>**/Asseteer.class</exclude> <!-- "Main menu"-klass -->
+        </excludes>
+    </configuration>
          </plugin>
 	  </plugins>
   </build>

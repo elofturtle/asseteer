@@ -10,10 +10,18 @@ public class Programvara extends Asset {
 	public Programvara() {
 		super();
 		updateId();
+		setImportant(true);
+	}
+	
+	@Override
+	public void setName(String name) {
+		super.setName(name);
+		updateId();
 	}
 
 	public Programvara(String name, ArrayList<Dependency> dependencies) {
 		super(name, dependencies);
+		setImportant(true);
 		updateId();
 	}
 	
@@ -23,11 +31,13 @@ public class Programvara extends Asset {
 		setÄgare(ägare);
 		setVersion(version);
 		setLeverantör(leverantör);
+		setImportant(true);
 		updateId();
 	}
 	
 	public Programvara(String namn, String ägare, String version, String leverantör, ArrayList<Dependency> beroenden) {
 		this(namn, ägare, version, leverantör);
+		setImportant(true);
 		this.setDependencies(beroenden);
 	}
 
@@ -66,11 +76,6 @@ public class Programvara extends Asset {
 	public void setLeverantör(String leverantör) {
 		this.leverantör = leverantör;
 		updateId();
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

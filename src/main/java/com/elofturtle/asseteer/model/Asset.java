@@ -8,8 +8,17 @@ public abstract class Asset implements Comparable<Asset> {
 	private String name;
 	private String id;
 	private ArrayList<Dependency> dependencies;
+	private boolean important;
 	
 	
+	public boolean isImportant() {
+		return important;
+	}
+
+	public void setImportant(boolean important) {
+		this.important = important;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -73,13 +82,12 @@ public abstract class Asset implements Comparable<Asset> {
 
 	public void setName(String name) {
 		this.name = name;
-		//this.id = getUUID();
 	}
 	
 	public Asset(){
 		name = null;
 		dependencies = null;
-		//id = getUUID();
+		important = false;
 	}
 	
 	public Dependency toDependency() {
@@ -89,12 +97,12 @@ public abstract class Asset implements Comparable<Asset> {
 	public Asset(String name, ArrayList<Dependency> dependencies) {
 		this.name = name;
 		this.dependencies = dependencies;
+		important = false;
 	}
 	
 	public Asset(String name) {
 		this.name = name;
 		this.dependencies = null;
-		//this.id = getUUID();
 	}
 	
 	@Override

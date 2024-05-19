@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.elofturtle.asseteer.model.Asset;
 import com.elofturtle.asseteer.model.Dependency;
+import com.elofturtle.asseteer.model.Programvara;
 import com.elofturtle.asseteer.model.SBOM;
 
 class SBOMTest {
@@ -20,7 +21,7 @@ class SBOMTest {
 		asset1.addDependency(asset2);
 		asset1.addDependency(asset2);
 		asset1.addDependency(asset2);
-		assertEquals(asset1.getDependencies().size(), 1);
+		assertEquals(1, asset1.getDependencies().size());
 	}
 	
 	@Test
@@ -36,7 +37,7 @@ class SBOMTest {
 		System.out.println("");
 		System.out.println("After:");
 		System.out.println(asset1.toRepresentation());
-		assertEquals(asset1.getDependencies().size(), 0);
+		assertEquals(0, asset1.getDependencies().size());
 	}
 	
 	@Test
@@ -49,7 +50,7 @@ class SBOMTest {
 		dependencies.add(asset2.toDependency());
 		dependencies.add(asset3.toDependency());
 		asset1.setDependencies(dependencies);
-		assertEquals(asset1.getDependencies(), dependencies);
+		assertEquals(dependencies, asset1.getDependencies());
 	}
 	
 	@Test
@@ -66,12 +67,41 @@ class SBOMTest {
 		Asset asset = new SBOM();
 		asset.setId("foo");
 		asset.setName("foo");
+		asset.setDependencies(l);
 		
-		System.out.println(asset.toRepresentation());
+		Asset asset2 = new SBOM();
+		asset2.setId("bar");
+		asset2.setName("bar");
+		
+		Programvara asset3 = new Programvara();
+		asset3.setLeverantör("osninja");
+		asset3.setVersion("1.2.3");
+		asset3.setÄgare("Jonatan");
+		asset3.setName("baz");
 		
 		
+		ArrayList<Asset> assets = new ArrayList<>();
+		assets.add(asset);
+		assets.add((Asset) asset3);
+		assets.add(asset2);
+		assets.sort(null);
 		
-		System.out.println(asset.toRepresentation());
-	}
+		
+		for(var item : assets ) {
+			if(item.getDependencies() != null) {
+				item.getDependencies().sort(null);
+			}
+			System.out.println(item.toRepresentation());
+		}
+		
+		assertAll("Can I order my SBOMs (is compareTo working as intended)?",
+				() -> assertEquals("a", asset.getDependencies().get(0).toString()),
+				() -> assertEquals("b", asset.getDependencies().get(1).toString()),
+				() -> assertEquals("c", asset.getDependencies().get(2).toString()),
+				() -> assertEquals("baz", assets.get(0).toString()),
+				() -> assertEquals("bar", assets.get(1).toString()),
+				() -> assertEquals("foo", assets.get(2).toString())
+				);
+		}
 
 }
