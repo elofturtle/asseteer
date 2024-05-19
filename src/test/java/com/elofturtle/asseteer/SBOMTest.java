@@ -103,5 +103,4 @@ class SBOMTest {
 				() -> assertEquals("foo", assets.get(2).toString())
 				);
 		}
-
 }

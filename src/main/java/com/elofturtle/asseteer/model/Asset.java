@@ -1,15 +1,32 @@
 package com.elofturtle.asseteer.model;
 
 import java.util.ArrayList;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import javax.annotation.Generated;
 import java.util.Objects;
 
 //"Allting" är en Asset, i framtiden kommer det att behövas ett metaobjekt på toppen eller nåt annat för att identiifera toppnivåapplikationerna. 
+@JacksonXmlRootElement(localName = "Asset")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "assetType")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = Programvara.class, name = "Programvara"),
+    @JsonSubTypes.Type(value = SBOM.class, name = "SBOM")
+    })
 public abstract class Asset implements Comparable<Asset> {
+	private String assetType;
 	private String name;
 	private String id;
 	private ArrayList<Dependency> dependencies;
 	private boolean important;
 	
+	@JsonSetter("id")
+    public void setIdFromDeserialization(String id) {
+        this.id = id;
+    }
 	
 	public boolean isImportant() {
 		return important;
@@ -23,11 +40,13 @@ public abstract class Asset implements Comparable<Asset> {
 		return name;
 	}
 	
+	@Generated("none")
 	@Override
 	public int hashCode() { //hash och equals tydligen viktiga om man vill ha saker i listor, compareTo() inte tillräckligt.
 		return Objects.hash(id);
 	}
 
+	@Generated("none")
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -88,6 +107,7 @@ public abstract class Asset implements Comparable<Asset> {
 		name = null;
 		dependencies = null;
 		important = false;
+		setAssetType();
 	}
 	
 	public Dependency toDependency() {
@@ -126,6 +146,14 @@ public abstract class Asset implements Comparable<Asset> {
 	// Alla klasser får ansvaret att generera ett globalt unikt ID
 	public int compareTo(Asset o) {
 		return this.id.compareTo(o.id);
+	}
+
+	public String getAssetType() {
+		return assetType;
+	}
+
+	public void setAssetType() {
+		assetType = this.getClass().getSimpleName();
 	}
 
 }

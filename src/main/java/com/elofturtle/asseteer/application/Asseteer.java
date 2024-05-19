@@ -8,36 +8,72 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
-
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 import com.elofturtle.asseteer.model.Asset;
 import com.elofturtle.asseteer.model.Dependency;
 import com.elofturtle.asseteer.model.SBOM;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.elofturtle.asseteer.io.XmlUtil;
 
 public class Asseteer {
 	private ArrayList<Asset> library;
 	private Map<String, List<Dependency>> reverse_lookup;
-	public String globalStateFile;
+	private String globalStateFile;
 	public Scanner scanner;
 	
-	enum MENU_STATE {
-			IMPORT_FROM_FILE,
-			ADD_ASSET,
-			EDIT_ASSET,
-			REMOVE_ASSET,
-			LIST_ASSETS,
-			SEARCH_ASSET,
-			QUIT;
-		
-			@Override
-			public String toString() {
-				return menuRepresentation(this);
+	public Asseteer(String path) {
+		library = new ArrayList<>();
+		globalStateFile = path;
+		scanner = new Scanner(System.in);
+		reverse_lookup = new HashMap<>();
+	}
+	
+	public void readState() throws IOException {
+		library = XmlUtil.deserialize(globalStateFile);
+	}
+	
+	public void saveState() {
+		try {
+			String s = XmlUtil.serialize(library);
+			System.out.println(s);
+			try (FileOutputStream fos = new FileOutputStream(globalStateFile);
+					BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"))) {
+				writer.write(s);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				System.exit(1);
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			System.out.println("Malformed document");
+			System.exit(1);
+		} 
 	}
 
+	enum MENU_STATE {
+		ADD_ASSET,
+		EDIT_ASSET,
+		REMOVE_ASSET,
+		LIST_ASSETS,
+		SEARCH_ASSET,
+		QUIT;
+
+		@Override
+		public String toString() {
+			return menuRepresentation(this);
+	}
 }
-	
+
+
 	public static void main(String[] args) {
-		Asseteer a = new Asseteer();
-		a.globalStateFile = System.getenv("HOME") + "/asseteer.xml";
+		Asseteer a = new Asseteer(System.getProperty("user.home") + "/asseteer.xml");		
 		
 		Queue<String> opts = new LinkedList<>();
 		for(var item : args) {
@@ -48,7 +84,6 @@ public class Asseteer {
 			switch(item) {
 			case "-f":
 			case "--file":
-				a.globalStateFile = opts.remove();
 				break;
 			}
 		}
@@ -62,9 +97,6 @@ public class Asseteer {
 			        	break;
 					case EDIT_ASSET:
 						a.MenuOptionEditAsset();
-						break;
-					case IMPORT_FROM_FILE:
-						a.MenuOptionImportFromFile();
 						break;
 					case LIST_ASSETS:
 						a.MenuOptionListAssets();
@@ -83,11 +115,6 @@ public class Asseteer {
 		        }  	
 		}
     }
-	
-	private void MenuOptionImportFromFile() {
-		
-		
-	}
 
 	private void MenuOptionListAssets() {
 		for(var item : library) {
@@ -97,11 +124,6 @@ public class Asseteer {
 	}
 
 	private void MenuOptionRemoveAsset() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void saveGlobalState() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -158,6 +180,7 @@ public class Asseteer {
 				sbom.addDependency(dependency);
 				
 				// A :- B --> B :- A
+				
 				if(!reverse_lookup.containsKey(dependency.toString())) {
 					reverse_lookup.put(dependency.toString(), new ArrayList<Dependency>());
 				}
@@ -169,6 +192,7 @@ public class Asseteer {
 			}
 			
 			library.add(sbom);
+			saveState();
 			
 			
 			break;

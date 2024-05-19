@@ -2,6 +2,9 @@ package com.elofturtle.asseteer.model;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+@JacksonXmlRootElement(localName = "Programvara")
 public class Programvara extends Asset {
 	private String ägare;
 	private String version;
@@ -43,6 +46,7 @@ public class Programvara extends Asset {
 
 	public Programvara(String name) {
 		super(name);
+		setImportant(true);
 		updateId();
 	}
 	
