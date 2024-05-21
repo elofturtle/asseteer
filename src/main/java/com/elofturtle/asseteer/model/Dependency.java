@@ -1,40 +1,81 @@
 package com.elofturtle.asseteer.model;
 
-import java.util.ArrayList;
+// Färdigtestad & dokumenterad
+
 import java.util.Objects;
 
-//Används för att binda samman Assets via uuid 
+/**
+ * Används för att binda samman Assets via deras uuid (det är en tunn wrapper för en String).
+ * @implNote troligtvis vill du inte använda denna självständigt, det är en intern del av applikationen.
+ * */
 public class Dependency implements Comparable<Dependency> {
 	private String id;
 	
+	/**
+	 * Den tomma konstruktorn behövs för deserialisering.
+	 * @hidden
+	 */
+	public Dependency() {
+		id = "";
+	}
+	
+	/**
+	 * Håller en referens till det unika id:t för en Asset.
+	 * @param id
+	 */
 	public Dependency(String id) {
 		this.id = id;
 	}
 
+	
+	/**
+	 * Håller en referens till en Asset via dess id.
+	 * @param a
+	 */
 	public Dependency(Asset a) {
 		this.id = a.getId();
 	}
 	
 	
 
+	/**
+	 * @return referens till en Asset.
+	 */
 	public String getId() {
 		return id;
 	}
 
+	/**
+	 * Sätt id manuellt.
+	 * @param id
+	 */
 	public void setId(String id) {
-		this.id = id;
+		if(id == null) {
+			this.id = "";
+		}else {
+			this.id = id;
+		}
 	}
 
+	/**
+	 *Skriver ut det unika id:t som refereras.
+	 */
 	@Override
 	public String toString() {
 		return this.id;
 	}
 	
+	/**
+	 * id-attributet används för unikhet. 
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
 
+	/**
+	 * Bedömer likhet genom att jämföra id:t.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -47,23 +88,12 @@ public class Dependency implements Comparable<Dependency> {
 		return Objects.equals(id, other.id);
 	}
 
+	/**
+	 *Jämför två Asset-id:n och använder det för att bedöma invärtes ordning.
+	 */
 	@Override
 	public int compareTo(Dependency o) {
 		return this.id.compareTo(o.toString());
 	}
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Dependency a = new Dependency("a");
-		Dependency b = new Dependency("b");
-		
-		ArrayList<Dependency> l = new ArrayList<Dependency>();
-		l.add(a);
-				
-		
-		System.out.println(a.compareTo(a));
-		System.out.println(a.compareTo(b));
-		System.out.println(l.contains(b));
-	}
-
 }

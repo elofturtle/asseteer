@@ -11,7 +11,7 @@ import com.elofturtle.asseteer.model.Dependency;
 import com.elofturtle.asseteer.model.Programvara;
 import com.elofturtle.asseteer.model.SBOM;
 
-class SBOMTest {
+class TestSBOM {
 
 	@Test
 	void testAddDependencyDependency() {

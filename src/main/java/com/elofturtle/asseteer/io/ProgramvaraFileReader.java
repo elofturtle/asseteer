@@ -11,8 +11,14 @@ import com.elofturtle.asseteer.model.Programvara;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 
+/**
+ * Importerar en XML med programvaror
+ */
 public class ProgramvaraFileReader extends AssetFileReader {
 
+	/**
+	 *Följer inte CycloneDX utan ett eget, enkelt format, för import.
+	 */
 	@Override
 	public ArrayList<Asset> readFromFile(String filePath) {
 		ArrayList<Asset> programvaror = new ArrayList<>();

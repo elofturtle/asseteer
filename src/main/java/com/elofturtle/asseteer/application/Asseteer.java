@@ -12,6 +12,10 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.FileOutputStream;
 import com.elofturtle.asseteer.model.Asset;
 import com.elofturtle.asseteer.model.Dependency;
@@ -32,8 +36,27 @@ public class Asseteer {
 		reverse_lookup = new HashMap<>();
 	}
 	
-	public void readState() throws IOException {
-		library = XmlUtil.deserialize(globalStateFile);
+	public void readState() {
+		Path filePath = Paths.get(globalStateFile);
+
+        try {
+            byte[] fileBytes = Files.readAllBytes(filePath);
+            String fileContent = new String(fileBytes, StandardCharsets.UTF_8);
+            library = XmlUtil.deserialize(fileContent);
+        } catch (IOException e) {
+            // Handle IOException
+            System.err.println("An error occurred while reading the file: " + e.getMessage());
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            // Handle SecurityException
+            System.err.println("A security error occurred: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            // Handle any other unexpected exceptions
+            System.err.println("An unexpected error occurred: " + e.getMessage());
+            e.printStackTrace();
+        }
+		
 	}
 	
 	public void saveState() {
@@ -73,7 +96,8 @@ public class Asseteer {
 
 
 	public static void main(String[] args) {
-		Asseteer a = new Asseteer(System.getProperty("user.home") + "/asseteer.xml");		
+		Asseteer a = new Asseteer(System.getProperty("user.home") + "/asseteer.xml");
+		a.readState();
 		
 		Queue<String> opts = new LinkedList<>();
 		for(var item : args) {

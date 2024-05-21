@@ -14,30 +14,36 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class XmlUtil {
-    private static XmlMapper xmlMapper = new XmlMapper();
+    /**
+     * Konverterar från/till utdataformat för att bearbeta filer.
+     * <p>
+     * Borde dessa kanske integreras i Asset-klassen direkt?
+     */
+    private static XmlMapper xmlMapper;
     
     static {
         xmlMapper = new XmlMapper();
         xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
         xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
-        
-        /*BasicPolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-        	    .allowIfBaseType(Asset.class) 
-        	    .build();
-        
-        xmlMapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE, JsonTypeInfo.As.PROPERTY);
-*/
     }
 
+    /**
+     * Serialiserar en lista med {@link com.elofturtle.asseteer.model.Asset Assets}, för att t.ex. kunna spara till fil.
+     * @param library
+     * @return
+     * @throws JsonProcessingException
+     */
     public static String serialize(ArrayList<Asset> library) throws JsonProcessingException {
         return xmlMapper.writeValueAsString(library);
     }
 
+    /**
+     * Deserialiserar en XML-sträng till en lista med {@link com.elofturtle.asseteer.model.Asset Assets}, för att t.ex. kunna läsa från fil.
+     * @param xml
+     * @return
+     * @throws JsonProcessingException
+     */
     public static ArrayList<Asset> deserialize(String xml) throws JsonProcessingException {
-        return xmlMapper.readValue(xml, new TypeReference<ArrayList<Asset>>() {});
-    }
-    
-    public static ArrayList<Asset> deserialize2(String xml) throws JsonProcessingException {
         return xmlMapper.readValue(xml, new TypeReference<ArrayList<Asset>>() {});
     }
 }
