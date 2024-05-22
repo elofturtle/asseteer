@@ -1,5 +1,6 @@
 # asseteer
 Lightweight Asset Management
+Se vidare https://elofturtle.github.io/asseteer-pages/ 
 Projektförslag, tänkt att pågå så långt vi hinner, kanske genom forsätningskursen.
 # Deltagare
 elofturtle
