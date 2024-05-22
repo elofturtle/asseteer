@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
+
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.nio.file.Paths;
 import java.io.FileOutputStream;
 import com.elofturtle.asseteer.model.Asset;
 import com.elofturtle.asseteer.model.Dependency;
+import com.elofturtle.asseteer.model.Programvara;
 import com.elofturtle.asseteer.model.SBOM;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.elofturtle.asseteer.io.XmlUtil;
@@ -94,7 +96,6 @@ public class Asseteer {
 	}
 }
 
-
 	public static void main(String[] args) {
 		Asseteer a = new Asseteer(System.getProperty("user.home") + "/asseteer.xml");
 		a.readState();
@@ -148,31 +149,146 @@ public class Asseteer {
 	}
 
 	private void MenuOptionRemoveAsset() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Enter the name of the asset to remove:");
+		String name = scanner.nextLine();
+		Asset assetToRemove = null;
+		for (Asset asset : library) {
+			if (asset.getName().equals(name)) {
+				assetToRemove = asset;
+				break;
+			}
+		}
+		if (assetToRemove != null) {
+			library.remove(assetToRemove);
+			System.out.println("Asset removed.");
+			saveState();
+		} else {
+			System.out.println("Asset not found.");
+		}
 	}
 
+
 	private void MenuOptionSearchAsset() {
-		// TODO Auto-generated method stub
-		
+		//TODO try out streams here instead!
+		System.out.println("Enter a part of the asset to search:");
+		String s = scanner.nextLine();
+		boolean foundAnything = false;
+		for (Asset asset : library) {
+			if (asset.getId().contains(s)) {
+				foundAnything = true;
+				System.out.println(asset.toRepresentation());
+				continue;
+			}
+		}
+		if(!foundAnything) {
+			System.out.println("Asset not found.");
+		}
 	}
 
 	private void MenuOptionEditAsset() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Enter the name of the asset to edit:");
+		String name = scanner.nextLine();
+		Asset assetToEdit = null;
+		for (Asset asset : library) {
+			if (asset.getName().equals(name)) {
+				assetToEdit = asset;
+				break;
+			}
+		}
+		if (assetToEdit != null) {
+			System.out.println("Found Asset\n" + assetToEdit.toRepresentation());
+			
+			System.out.println("Enter new name (or press Enter to keep current name):");
+			String newName = scanner.nextLine();
+			if (!newName.isEmpty()) {
+				assetToEdit.setName(newName);
+			}
+
+			if (assetToEdit instanceof SBOM) {
+	            SBOM sbom = (SBOM) assetToEdit;
+
+	            System.out.println("Enter new package name (or press Enter to keep current package name):");
+	            String newPackageName = scanner.nextLine();
+
+	            System.out.println("Enter new version (or press Enter to keep current version):");
+	            String newVersion = scanner.nextLine();
+
+	            if (!newPackageName.isEmpty() || !newName.isEmpty() || !newVersion.isEmpty()) {
+	                String packageName = !newPackageName.isEmpty() ? newPackageName : sbom.getId().split(":")[1].split("/")[0];
+	                String nameToUse = !newName.isEmpty() ? newName : sbom.getName();
+	                String versionToUse = !newVersion.isEmpty() ? newVersion : sbom.getId().split("@")[1];
+
+	                sbom.setId("pkg:" + packageName + "/" + nameToUse + "@" + versionToUse);
+	                
+	                System.out.println("Is this a primary application? (y/n)");
+	                String importantResponse = scanner.nextLine().trim().toLowerCase();
+	                boolean important = importantResponse.equals("y") || importantResponse.equals("yes");
+	                sbom.setImportant(important);
+	            }
+			}
+	            
+			else if (assetToEdit instanceof Programvara) {
+				Programvara programvara = (Programvara) assetToEdit;
+				System.out.println("Enter new owner (or press Enter to keep current owner):");
+				String newOwner = scanner.nextLine();
+				if (!newOwner.isEmpty()) {
+					programvara.setÄgare(newOwner);
+				}
+
+				System.out.println("Enter new version (or press Enter to keep current version):");
+				String programvaraNewVersion = scanner.nextLine();
+				if (!programvaraNewVersion.isEmpty()) {
+					programvara.setVersion(programvaraNewVersion);
+				}
+
+				System.out.println("Enter new supplier (or press Enter to keep current supplier):");
+				String newSupplier = scanner.nextLine();
+				if (!newSupplier.isEmpty()) {
+					programvara.setLeverantör(newSupplier);
+				}
+			}
+
+			// Additional fields can be added here as needed
+
+			System.out.println("Asset updated.");
+			saveState();
+		} else {
+			System.out.println("Asset not found.");
+		}
 	}
 
 	private void MenuOptionAddAsset() {
 		System.out.println("Add Asset");
 		enum ASSET_TYPES{
-			PROGRAMVARA,
+			PROGRAMVARA, 
 			SBOM,
 			CANCEL
 		}
 		var assetType = menuOptionHelper(ASSET_TYPES.values(), "Add asset of which type?", scanner);
 		switch(assetType) {
 		case PROGRAMVARA:
+			Programvara programvara = new Programvara();
 			
+			System.out.println("Name:");
+			String programName = scanner.nextLine();
+			programvara.setName(programName);
+			
+			System.out.println("Owner:");
+			String programOwner = scanner.nextLine();
+			programvara.setÄgare(programOwner);
+			
+			System.out.println("Version:");
+			String programVersion = scanner.nextLine();
+			programvara.setVersion(programVersion);
+			
+			System.out.println("Supplier:");
+			String programSupplier = scanner.nextLine();
+			programvara.setLeverantör(programSupplier);
+			
+			addDependencyMenuAction(programvara);
+						
+			library.add(programvara);
+			saveState();
 			break;
 		case SBOM:
 			SBOM sbom = new SBOM();			
@@ -180,6 +296,7 @@ public class Asseteer {
 			String packageName = scanner.nextLine();
 			
 			System.out.println("Name:");
+			
 			String name = scanner.nextLine();
 			
 			System.out.println("Version:");
@@ -192,28 +309,7 @@ public class Asseteer {
 			sbom.setImportant(important);
 			sbom.setId("pkg:" + packageName + "/" + name + "@" + version);
 			
-			System.out.println("Would you like to add a dependency? (true/false)");
-			boolean addDependency = scanner.nextBoolean();
-			scanner.nextLine();
-			
-			while(addDependency) {
-				System.out.println("Enter id of dependency:");
-				String newdep = scanner.nextLine();
-				System.out.println("New Dep: '" + newdep + "'");
-				Dependency dependency = new Dependency(newdep);
-				sbom.addDependency(dependency);
-				
-				// A :- B --> B :- A
-				
-				if(!reverse_lookup.containsKey(dependency.toString())) {
-					reverse_lookup.put(dependency.toString(), new ArrayList<Dependency>());
-				}
-				reverse_lookup.get(dependency.toString()).add(new Dependency(sbom));
-				
-				System.out.println("Would you like to add another dependency? (true/false)");
-				addDependency = scanner.nextBoolean();
-				scanner.nextLine();
-			}
+			addDependencyMenuAction(sbom);
 			
 			library.add(sbom);
 			saveState();
@@ -223,6 +319,32 @@ public class Asseteer {
 			
 		case CANCEL:
 			return;
+		}
+	}
+
+	private void addDependencyMenuAction(Asset asset) {
+		System.out.println("Would you like to add a dependency? (y/n)");
+		String addDependencyResponse = scanner.nextLine().trim().toLowerCase();
+		boolean addDependency = addDependencyResponse.equals("y") || addDependencyResponse.equals("yes");
+		
+		while(addDependency) {
+			System.out.println("Enter id of dependency:");
+			String newdep = scanner.nextLine();
+			System.out.println("New Dep: '" + newdep + "'");
+			Dependency dependency = new Dependency(newdep);
+			asset.addDependency(dependency);
+			
+			// A :- B --> B :- A
+			
+			if(!reverse_lookup.containsKey(dependency.toString())) {
+				reverse_lookup.put(dependency.toString(), new ArrayList<Dependency>());
+			}
+			reverse_lookup.get(dependency.toString()).add(new Dependency(asset));
+			
+			System.out.println("Would you like to add a dependency? (y/n)");
+			addDependencyResponse = scanner.nextLine().trim().toLowerCase();
+			addDependency = addDependencyResponse.equals("y") || addDependencyResponse.equals("yes");
+
 		}
 	}
 	

@@ -4,13 +4,10 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.util.ArrayList;
 import com.elofturtle.asseteer.model.Asset;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class XmlUtil {
@@ -18,6 +15,7 @@ public class XmlUtil {
      * Konverterar från/till utdataformat för att bearbeta filer.
      * <p>
      * Borde dessa kanske integreras i Asset-klassen direkt?
+     *
      */
     private static XmlMapper xmlMapper;
     
@@ -30,8 +28,8 @@ public class XmlUtil {
     /**
      * Serialiserar en lista med {@link com.elofturtle.asseteer.model.Asset Assets}, för att t.ex. kunna spara till fil.
      * @param library
-     * @return
-     * @throws JsonProcessingException
+     * @return the result of the parsing
+     * @throws JsonProcessingException if an error occurs during parsing
      */
     public static String serialize(ArrayList<Asset> library) throws JsonProcessingException {
         return xmlMapper.writeValueAsString(library);

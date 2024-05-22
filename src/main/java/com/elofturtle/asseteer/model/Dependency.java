@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /**
  * Används för att binda samman Assets via deras uuid (det är en tunn wrapper för en String).
- * @implNote troligtvis vill du inte använda denna självständigt, det är en intern del av applikationen.
+ * Troligtvis vill du inte använda denna självständigt, det är en intern del av applikationen.
  * */
 public class Dependency implements Comparable<Dependency> {
 	private String id;

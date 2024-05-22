@@ -1,6 +1,6 @@
 package com.elofturtle.asseteer.io;
 
-import org.cyclonedx.BomParserFactory;
+import org.cyclonedx.parsers.BomParserFactory;
 import org.cyclonedx.exception.ParseException;
 import com.elofturtle.asseteer.model.Asset;
 import com.elofturtle.asseteer.model.Dependency;

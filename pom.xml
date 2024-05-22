@@ -1,4 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!-- https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html -->
+  <!-- Kolla om det finns nya versioner av beroenden: mvnw versions:display-dependency-updates -->
+  <!-- Kolla om det finns nya versioner för mina plguins (för maven):  mvn versions:display-dependency-updates -->
+ 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.elofturtle.asseteer</groupId>
   <artifactId>asseteer</artifactId>
@@ -6,60 +10,71 @@
   <name>Asseteer</name>
   <description>Asseteer is a simple asset management utlility</description>
   <url>https://github.com/elofturtle/asseteer</url>
-  <scm>
-  	<url>https://github.com/elofturtle/asseteer.git</url>
-  	<developerConnection>elofturtle</developerConnection>
+  
+  <scm> <!-- Nån rapport ville ha detta, men oklart varför -->
+        <connection>scm:git:git://github.com/elofturtle/asseteer.git</connection>
+        <developerConnection>scm:git:https://github.com:elofturtle/asseteer.git</developerConnection>
+        <url>https://github.com/elofturtle/asseteer</url>
   </scm>
   
-  <dependencies>
+  <dependencies> <!-- Beroenden till min kod -->
 	 <dependency> <!-- Markera vissa metoder att undantas från kodtäckning via Generated -->
     	<groupId>javax.annotation</groupId>
     	<artifactId>javax.annotation-api</artifactId>
     	<version>1.3.2</version>
 	</dependency>
-	<dependency>
+	<dependency><!-- Parsa dokument i cdx-formatet. 
+					På sikt vill vi kunna hantera mer med detta, 
+					men i dagsläget så projicerar vi bara en liten 
+					del om vi vill importera sådana dokument 
+					-->
 	  	<groupId>org.cyclonedx</groupId>
-	  	<artifactId>cyclonedx-core-java</artifactId> <!-- Parsa dokument i cdx-formatet -->
-	  	<version>8.0.3</version>
-	  </dependency>
-	  <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-		 <dependency>
-		    <groupId>org.junit.jupiter</groupId> <!-- Skriva fina testfall. Tydligen mer modulärt i 5.x så flera beroenden. -->
-		    <artifactId>junit-jupiter-api</artifactId>
-		    <version>5.11.0-M1</version>
-		    <scope>test</scope>
-		 </dependency>
-		 <dependency>
+	  	<artifactId>cyclonedx-core-java</artifactId> 
+	  	<version>9.0.0</version>
+	 </dependency>
+	<dependency><!--https://junit.org/junit5/docs/current/user-guide/-->
+	    <groupId>org.junit.jupiter</groupId> 
+	    <artifactId>junit-jupiter-api</artifactId>
+	    <version>5.11.0-M2</version>
+	    <scope>test</scope> <!-- Behövs bara under tester https://www.baeldung.com/maven-dependency-scopes -->
+	 </dependency>
+		 <dependency><!--https://junit.org/junit5/docs/current/user-guide/-->
 		<groupId>org.junit.jupiter</groupId>
 		<artifactId>junit-jupiter-engine</artifactId>
-		<version>5.2.0</version>
+		<version>5.11.0-M2</version>
 		<scope>test</scope>
 	</dependency>
-	<dependency>
+	<dependency> <!-- I det här projektet hanterar vi persistering av applikationens 
+					egna state med Jackson 
+					https://github.com/FasterXML/jackson-dataformat-xml
+					-->
     	<groupId>com.fasterxml.jackson.dataformat</groupId>
     	<artifactId>jackson-dataformat-xml</artifactId>
     	<version>2.17.1</version>
 	</dependency>
-	<dependency>
-  <groupId>com.fasterxml.woodstox</groupId>
-  <artifactId>woodstox-core</artifactId>
-  <version>6.5.0</version>
-</dependency>
+	<dependency> <!-- När jag satt och felsökte Jakcson XML insinuerades det 
+				kraftigt att detta var ett bra tillskott i största allmänhet,
+				men det är mindre troligt att det är ett aktivt beroende
+				https://github.com/FasterXML/woodstox-->
+	  <groupId>com.fasterxml.woodstox</groupId>
+	  <artifactId>woodstox-core</artifactId>
+	  <version>6.6.2</version>
+	</dependency>
 	<dependency>
 		<groupId>org.junit.platform</groupId>
 		<artifactId>junit-platform-runner</artifactId>
-		<version>1.2.0</version>
+		<version>1.11.0-M2</version>
 		<scope>test</scope>
 	</dependency>
 	<dependency>
 	    <groupId>org.jline</groupId>
 	    <artifactId>jline</artifactId>
-	    <version>3.20.0</version>  <!-- Check for the latest version on Maven Central -->
+	    <version>3.26.1</version>  <!-- Check for the latest version on Maven Central -->
 	</dependency>
 	<dependency>
 	    <groupId>com.jcabi</groupId>
 	    <artifactId>jcabi-xml</artifactId>
-	    <version>0.22.2</version>
+	    <version>0.29.0</version>
 	</dependency>
   </dependencies>
   
@@ -67,13 +82,15 @@
   	<maven.compiler.target>21</maven.compiler.target> <!-- vilken JDK siktar vi på? Annars bygger klagar mvn på att nya funktioner används. -->
   	<maven.compiler.source>21</maven.compiler.source>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- Klagar på encoding annars -->
+      <maven.compiler.release>21</maven.compiler.release>
   </properties>
+  
   <build>
 	  <plugins>
-		  <plugin>
-            <groupId>org.jacoco</groupId> <!-- Kodtäckningsrapporter, oklart om det är kaka på kaka mot junit (TODO: kolla) -->
+		  <plugin><!-- Kodtäckningsrapporter https://www.baeldung.com/jacoco -->
+            <groupId>org.jacoco</groupId> 
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.5</version>
+            <version>0.8.12</version>
             <executions>
                <execution>
                   <goals>
@@ -89,13 +106,155 @@
                </execution>
             </executions>
             <configuration>
-        <excludes>
-            <exclude>**/*Test.class</exclude> <!-- Slippa göra tester för testerna för testerna för testerna... -->
-            <exclude>**/Test*.class</exclude> 
-            <exclude>**/Asseteer.class</exclude> <!-- "Main menu"-klass -->
-        </excludes>
-    </configuration>
-         </plugin>
+		        <excludes>
+		            <exclude>**/*Test.class</exclude> <!-- Slippa göra tester för testerna för testerna för testerna... -->
+		            <exclude>**/Test*.class</exclude> 
+		            <exclude>**/Asseteer.class</exclude> <!-- "Main menu"-klass -->
+		        </excludes>
+		    </configuration>
+		  </plugin>
+
+        <plugin> <!-- Generar en HTML-sida av min MD-fil, 
+        			men hanterar inte andra resurser, som bilder
+        			https://github.com/walokra/markdown-page-generator-plugin
+        			-->
+            <groupId>com.ruleoftech</groupId>
+            <artifactId>markdown-page-generator-plugin</artifactId>
+            <version>2.4.0</version>
+            <executions>
+                <execution>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.basedir}/target/site/generated-docs/markdown</outputDirectory>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+            
+        <plugin> <!-- Kopiera filer (det som markdown-pluginet inte gör) https://maven.apache.org/plugins/maven-resources-plugin/ -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions> <!-- Man kan köra flera olika executions
+            					En till varje outptut directory
+            					-->
+                <execution> <!-- Av någon godtyckligt anledning vill inte markdown-pluginet 
+                					leta efter sina filer någon annan stans, 
+                					trots oändligt bråk med konfigurationen.
+                					Workround är att flytta filerna dit den faktiskt letar :/
+                					-->
+                    <id>copy-markdown</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.basedir}/src/main/resources/markdown</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>${project.basedir}</directory>
+                                <includes>
+                                    <include>*.md</include>
+                                    <include>images/**</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution> 
+                <execution><!-- I steg 2 så klarar markdown-pluginet återigen av att spotta ur sig HTML 
+                					på det ställe som jag vill, men flyttar inte på reurserna.
+                					Så vi flyttar på filer till output-katalogen här
+                					-->
+                    <id>copy-images-to-site</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.basedir}/target/site/generated-docs/markdown/</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>${project.basedir}/src/main/resources/markdown</directory>
+                                <includes>
+                                    <include>images/**</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+        <plugin> <!-- Generera javadoc https://maven.apache.org/plugins/maven-javadoc-plugin/ -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.3.2</version>
+             <executions>
+                <execution>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>javadoc</goal>
+                    </goals>
+                    <configuration>
+                        <destDir>generated-docs/javadoc</destDir>
+                        <additionalJOptions>-Xdoclint:none</additionalJOptions>
+                        <additionalJOptions>-quiet</additionalJOptions>
+                        <excludePackageNames>com.elofturtle.asseteer.test</excludePackageNames>
+                        <sourcepath>src/main/java</sourcepath>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+        <plugin> <!-- Generera en webbplats -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.9.1</version>
+            <configuration>
+                <siteDirectory>${project.basedir}/src/site</siteDirectory>
+            </configuration>
+        </plugin>
+           <plugin>
+			    <groupId>org.codehaus.mojo</groupId>
+			    <artifactId>versions-maven-plugin</artifactId>
+			    <version>2.11.0</version>
+			    <configuration>
+			        <formats>xml</formats>
+			    </configuration>
+			</plugin>
+			
+			
+
 	  </plugins>
   </build>
+  <reporting>
+	  <plugins>
+		<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <destDir>generated-docs/javadoc</destDir>
+                    <additionalJOptions>-Xdoclint:none</additionalJOptions>
+                    <additionalJOptions>-quiet</additionalJOptions>
+                    <excludePackageNames>com.elofturtle.asseteer.test</excludePackageNames>
+                </configuration>
+            </plugin>
+            <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <!-- select non-aggregate reports -->
+              <report>report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+	  </plugins>
+	</reporting>
 </project>

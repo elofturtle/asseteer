@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.elofturtle.asseteer.application"},{"l":"com.elofturtle.asseteer.io"},{"l":"com.elofturtle.asseteer.model"}];updateSearchResults();
