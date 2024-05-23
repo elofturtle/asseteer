@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.elofturtle.asseteer</groupId>
   <artifactId>asseteer</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.5.0</version>
   <name>Asseteer</name>
   <description>Asseteer is a simple asset management utlility</description>
   <url>https://github.com/elofturtle/asseteer</url>
@@ -164,6 +164,26 @@
                         </resources>
                     </configuration>
                 </execution> 
+                <execution> <!-- Flytta genererad site :/
+                					-->
+                    <id>move-site</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.basedir}/../site</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>${project.basedir}/target/site/</directory>
+                                <filtering>true</filtering>
+                                <!--<includes>
+                                    <include>**/**</include>
+                                </includes>-->
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution> 
                 <execution><!-- I steg 2 så klarar markdown-pluginet återigen av att spotta ur sig HTML 
                 					på det ställe som jag vill, men flyttar inte på reurserna.
                 					Så vi flyttar på filer till output-katalogen här
@@ -217,19 +237,91 @@
                 <siteDirectory>${project.basedir}/src/site</siteDirectory>
             </configuration>
         </plugin>
-           <plugin>
-			    <groupId>org.codehaus.mojo</groupId>
-			    <artifactId>versions-maven-plugin</artifactId>
-			    <version>2.11.0</version>
-			    <configuration>
-			        <formats>xml</formats>
-			    </configuration>
-			</plugin>
+       <plugin>
+		    <groupId>org.codehaus.mojo</groupId>
+		    <artifactId>versions-maven-plugin</artifactId>
+		    <version>2.11.0</version>
+		    <configuration>
+		        <formats>xml</formats>
+		    </configuration>
+		</plugin>
 			
-			
+		<plugin><!-- Packa jar-filen -->
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-shade-plugin</artifactId>
+	        <version>3.5.3</version>
+	        <executions>
+	          <execution>
+	            <phase>package</phase>
+	            <goals>
+	              <goal>shade</goal>
+	            </goals>
+	            <configuration>
+					<artifactSet>
+                                <excludes>
+                                    <!-- Exclude META-INF files to suppress warnings -->
+                                    <exclude>META-INF/*.SF</exclude>
+                                    <exclude>META-INF/*.DSA</exclude>
+                                    <exclude>META-INF/*.RSA</exclude>
+                                    <exclude>META-INF/module-info</exclude>
+                                    <exclude>META-INF.versions.9.module-info</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <includes>
+                                        <include>**/*.class</include>
+                                    </includes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <!-- Transformer to merge service files -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <!-- Transformer to merge properties files -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.handlers</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.schemas</resource>
+                                </transformer>
+                                <!-- Transformer to merge other resources -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/com.fasterxml.jackson.core.ObjectCodec</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/com.fasterxml.jackson.core.JsonFactory</resource>
+                                </transformer>
+                                <!-- Transformer to merge license files -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/LICENSE.txt</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/NOTICE.txt</resource>
+                                </transformer>
+                                <!-- Transformer to handle module-info.class -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                                    <resource>META-INF/versions/9/module-info.class</resource>
+                                </transformer>
+                            </transformers>
+	              <transformers>
+	                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+	                  <manifestEntries>
+	                  	<Main-Class>com.elofturtle.asseteer.application.Asseteer</Main-Class>
+	                 	<Build-Number>${maven.build.timestamp}</Build-Number>
+	                 	<Author>elofturtle.com</Author>
+	                 </manifestEntries>
+	                 
+	                </transformer>
+	              </transformers>
+	            </configuration>
+	          </execution>
+	        </executions>
+	      </plugin>
 
 	  </plugins>
   </build>
+  
   <reporting>
 	  <plugins>
 		<plugin>

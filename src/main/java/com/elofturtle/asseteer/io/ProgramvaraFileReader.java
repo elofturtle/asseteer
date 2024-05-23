@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.elofturtle.asseteer.exception.WeirdFileException;
 import com.elofturtle.asseteer.model.Asset;
 import com.elofturtle.asseteer.model.Dependency;
 import com.elofturtle.asseteer.model.Programvara;
@@ -15,12 +16,20 @@ import com.jcabi.xml.XMLDocument;
  * Importerar en XML med programvaror
  */
 public class ProgramvaraFileReader extends AssetFileReader {
+	
+	/**
+	 * Standardkonstruktor
+	 */
+	public ProgramvaraFileReader() {
+		super();
+	}
 
 	/**
 	 *Följer inte CycloneDX utan ett eget, enkelt format, för import.
+	 * @throws WeirdFileException filfel
 	 */
 	@Override
-	public ArrayList<Asset> readFromFile(String filePath) {
+	public ArrayList<Asset> readFromFile(String filePath) throws WeirdFileException {
 		ArrayList<Asset> programvaror = new ArrayList<>();
         XML xml;
 		try {
@@ -45,6 +54,8 @@ public class ProgramvaraFileReader extends AssetFileReader {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);
+		}catch(Exception e) {
+			throw new WeirdFileException("Okänt filfel", e);
 		}
 
         return programvaror;

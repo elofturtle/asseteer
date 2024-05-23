@@ -10,7 +10,16 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 
 
+/**
+ * Stödklass med metoder för persistering i de tinterna dataformatet.
+ */
 public class XmlUtil {
+	/**
+	 * Default-konstruktor
+	 */
+	public XmlUtil() {
+		
+	}
     /**
      * Konverterar från/till utdataformat för att bearbeta filer.
      * <p>
@@ -27,7 +36,7 @@ public class XmlUtil {
 
     /**
      * Serialiserar en lista med {@link com.elofturtle.asseteer.model.Asset Assets}, för att t.ex. kunna spara till fil.
-     * @param library
+     * @param library en samling Assets
      * @return the result of the parsing
      * @throws JsonProcessingException if an error occurs during parsing
      */
@@ -37,9 +46,9 @@ public class XmlUtil {
 
     /**
      * Deserialiserar en XML-sträng till en lista med {@link com.elofturtle.asseteer.model.Asset Assets}, för att t.ex. kunna läsa från fil.
-     * @param xml
-     * @return
-     * @throws JsonProcessingException
+     * @param xml en sträng som innehåller en XML
+     * @return en lista med Assets
+     * @throws JsonProcessingException om xml:en inte har en korrekt struktur
      */
     public static ArrayList<Asset> deserialize(String xml) throws JsonProcessingException {
         return xmlMapper.readValue(xml, new TypeReference<ArrayList<Asset>>() {});

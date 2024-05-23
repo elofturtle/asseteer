@@ -2,6 +2,8 @@ package com.elofturtle.asseteer.io;
 
 import org.cyclonedx.parsers.BomParserFactory;
 import org.cyclonedx.exception.ParseException;
+
+import com.elofturtle.asseteer.exception.WeirdFileException;
 import com.elofturtle.asseteer.model.Asset;
 import com.elofturtle.asseteer.model.Dependency;
 import com.elofturtle.asseteer.model.SBOM;
@@ -13,13 +15,21 @@ import java.util.ArrayList;
  * This is a parser for the CycloneDX format.
  */
 public class SBOMFileReader extends AssetFileReader { 
+	
+	/**
+	 * Defaultkonsturktor
+	 */
+	public SBOMFileReader() {
+		super();
+	}
 /**
  * Converts selected parts of a cycloneDX SBOM XML file into SBOM:s.
  * @param fp Path to the XML file.
  * @return A list of SBOM Assets.
+ * @throws WeirdFileException filfel
  */
 @Override
-public ArrayList<Asset> readFromFile(String fp) {	
+public ArrayList<Asset> readFromFile(String fp) throws WeirdFileException {	
 	/**
 	 * Path to an XML file.
 	 */
@@ -99,6 +109,7 @@ public ArrayList<Asset> readFromFile(String fp) {
 		 }
 	} catch (ParseException e) {
 		e.printStackTrace();
+		throw new WeirdFileException("Det är något fel med filen som du vill läsa, är det verkligen CycloneDX?", e);
 	}
 	return sboms;
 } 

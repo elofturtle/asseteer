@@ -46,8 +46,8 @@ public class Programvara extends Asset {
 
 	/**
 	 * Sätt grundläggande parametrar.
-	 * @param name
-	 * @param dependencies
+	 * @param name namn
+	 * @param dependencies beroenden
 	 */
 	public Programvara(String name, ArrayList<Dependency> dependencies) {
 		super(name, dependencies);
@@ -57,10 +57,10 @@ public class Programvara extends Asset {
 	
 	/**
 	 * Sätt samtliga parametrar utom beroenden.
-	 * @param namn
-	 * @param ägare
-	 * @param version
-	 * @param leverantör
+	 * @param namn namn
+	 * @param ägare ägare
+	 * @param version version
+	 * @param leverantör leverntör
 	 */
 	public Programvara(String namn, String ägare, String version, String leverantör) {
 		super();
@@ -74,11 +74,11 @@ public class Programvara extends Asset {
 	
 	/**
 	 * Sätter samtliga parametrar.
-	 * @param namn
-	 * @param ägare
-	 * @param version
-	 * @param leverantör
-	 * @param beroenden
+	 * @param namn namn
+	 * @param ägare ägare
+	 * @param version version
+	 * @param leverantör leverantör
+	 * @param beroenden beroenden
 	 */
 	public Programvara(String namn, String ägare, String version, String leverantör, ArrayList<Dependency> beroenden) {
 		this(namn, ägare, version, leverantör);
@@ -88,7 +88,7 @@ public class Programvara extends Asset {
 
 	/**
 	 * Sätt bara namn.
-	 * @param name
+	 * @param name namn
 	 */
 	public Programvara(String name) {
 		super(name);
@@ -105,13 +105,15 @@ public class Programvara extends Asset {
 	}
 
 	/**
-	 * @return Förvaltningsansvarig
+	 * Hämta ägare
+	 * @return Förvaltningsansvarig förvaltningsansvarig
 	 */
 	public String getÄgare() {
 		return ägare;
 	}
 
 	/**
+	 * Spara förvaltningsansvarig
 	 * @param ägare Förvaltningsansvarig
 	 */
 	public void setÄgare(String ägare) {
@@ -120,13 +122,15 @@ public class Programvara extends Asset {
 	}
 
 	/**
-	 * @return version
+	 * Hämta version
+	 * @return version version
 	 */
 	public String getVersion() {
 		return version;
 	}
 
 	/**
+	 * Spara version
 	 * @param version version
 	 */
 	public void setVersion(String version) {
@@ -135,6 +139,7 @@ public class Programvara extends Asset {
 	}
 
 	/**
+	 * Hämta leverantör
 	 * @return Leverantör
 	 */
 	public String getLeverantör() {
@@ -142,6 +147,7 @@ public class Programvara extends Asset {
 	}
 
 	/**
+	 * Spara leverantör
 	 * @param leverantör Leverantör
 	 */
 	public void setLeverantör(String leverantör) {

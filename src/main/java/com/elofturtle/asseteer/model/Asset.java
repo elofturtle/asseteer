@@ -61,30 +61,33 @@ public abstract class Asset implements Comparable<Asset> {
 	 * in från fil. Därför har vi en separat metod som bara ska användas vid {@link com.elofturtle.asseteer.io.XmlUtil deserialisering}. 
 	 * @deprecated kommer troligtvis att deprekeras i version 2.
 	 */
+	@Deprecated
 	@JsonSetter("id")
     public void setIdFromDeserialization(String id) {
         this.id = id;
     }
 	
 	/**
-	 * @return  Är detta en toppnivåapplikation med en intern förvaltare?
+	 * Är detta en toppnivåapplikation med en intern förvaltare?
+	 * @return  important är det en förvaltad applikation?
 	 */
 	public boolean isImportant() {
 		return important;
 	}
 
 	/**
-	 * @param important
 	 * Om satt så betecknar det att detta är en Asset som är viktig, och troligtvis har en intern förvaltare/intressent.
+	 * @param important är det en förvaltad applikation?
+	 * 
 	 */
 	public void setImportant(boolean important) {
 		this.important = important;
 	}
 
 	/**
-	 * @return namn
 	 * Namn är en läsvänlig egenskap.
 	 * Det kan finnas dubletter, t.ex. två versioner av samma applikation.
+	 * @return namn
 	 * @see #toRepresentation() 
 	 */
 	public String getName() {
@@ -117,6 +120,7 @@ public abstract class Asset implements Comparable<Asset> {
 	}
 
 	/**
+	 * Returnerar objektets id.
 	 * @return id (purl)
 	 */
 	public String getId() {
@@ -125,16 +129,17 @@ public abstract class Asset implements Comparable<Asset> {
 
 	
 	/**
-	 * @param id
 	 * Varje asset identifieras av ett id, t.ex. purl.
 	 * För närvarande innehåller den klassnamnet för unikhet mellan subklasse, vilket
 	 * konkurrerar med {@link #assetType} så det måste refaktoreras vid tillfälle.
+	 * @param id id.
 	 */
 	public void setId(String id) {
 		this.id = this.getClass().getSimpleName() + ":" + id;
 	}
 
 	/**
+	 * Eventuella beroenden till din Asset.
 	 * @return en referens till kända beroenden.
 	 */
 	public ArrayList<Dependency> getDependencies() {
@@ -142,9 +147,9 @@ public abstract class Asset implements Comparable<Asset> {
 	}
 
 	/**
-	 * @param dependencies
 	 * Koppla en extern lista med beroenden till en Asset.
 	 * Adderar inte till existerande beroenden!
+	 * @param dependencies beroenden
 	 */
 	public void setDependencies(ArrayList<Dependency> dependencies) {
 		// Möjliggör manipulering av internt state, borde kanske kopiera istället.
@@ -153,8 +158,8 @@ public abstract class Asset implements Comparable<Asset> {
 	
 	
 	/**
-	 * @param d
 	 * Addera en {@link com.elofturtle.asseteer.model.Dependency Dependency} till Asset.
+	 * @param d beroendet som ska länkas in
 	 */
 	public void addDependency(Dependency d) {
 		if(dependencies == null) {
@@ -166,16 +171,16 @@ public abstract class Asset implements Comparable<Asset> {
 	}
 	
 	/**
-	 * @param a
 	 * Addera en {@link com.elofturtle.asseteer.model.Asset Asset} som beroende till denna Asset.
+	 * @param a beroendet som ska länkas in
 	 */
 	public void addDependency(Asset a) {
 		addDependency(new Dependency(a));
 	}
 	
 	/**
-	 * @param d
 	 * Avlägsna ett beroende.
+	 * @param d beroendet som ska avlägsnas
 	 */
 	public void removeDependency(Dependency d) {
 		dependencies.remove(d);
@@ -183,16 +188,16 @@ public abstract class Asset implements Comparable<Asset> {
 	}
 	
 	/**
-	 * @param a
 	 * Avlägsna ett beroende.
+	 * @param a beroendet som ska avlägsnas
 	 */
 	public void removeDependency(Asset a) {
 		dependencies.remove(new Dependency(a));
 	}
 
 	/**
-	 * @param name
 	 * Sätt visningsnamn på Asset.
+	 * @param name nya namnet
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -210,6 +215,7 @@ public abstract class Asset implements Comparable<Asset> {
 	}
 	
 	/**
+	 * Motsvarande Dependency-referens för objektet.
 	 * @return {@link com.elofturtle.asseteer.model.Dependency Dependency} som refererar till {@link #id} för objektet.
 	 * <br/>	  
 	 * Eftersom det används mycket i länkar, men vi egentligen arbetar med Assets, så är det bekvämt att kunna returnera referensen från objektet istället för att konvertera det manuellt.
@@ -244,6 +250,7 @@ public abstract class Asset implements Comparable<Asset> {
 	 *{@inheritDoc}
 	 *<p>
 	 *Returnerar {@link #name namn} på ojektet.
+	 *@return en beskrivande sträng.
 	 */
 	@Override
 	public String toString() {
@@ -281,7 +288,9 @@ public abstract class Asset implements Comparable<Asset> {
 	/**
 	 * {@inheritDoc}
 	 * Alla klasser får ansvaret att generera ett globalt unikt ID som kan användas vid jämförelser.
-	 * <p>Borde integrera klasstyp här på sikt.
+	 * <p>
+	 * Borde integrera klasstyp här på sikt.
+	 * @return en helstalsindikator som kan användas för sortering.
 	 */
 	@Override
 	public int compareTo(Asset o) {

@@ -1,7 +1,5 @@
 package com.elofturtle.asseteer.model;
 
-// Färdigtestad & dokumenterad
-
 import java.util.Objects;
 
 /**
@@ -21,7 +19,7 @@ public class Dependency implements Comparable<Dependency> {
 	
 	/**
 	 * Håller en referens till det unika id:t för en Asset.
-	 * @param id
+	 * @param id id
 	 */
 	public Dependency(String id) {
 		this.id = id;
@@ -30,7 +28,7 @@ public class Dependency implements Comparable<Dependency> {
 	
 	/**
 	 * Håller en referens till en Asset via dess id.
-	 * @param a
+	 * @param a asset
 	 */
 	public Dependency(Asset a) {
 		this.id = a.getId();
@@ -39,6 +37,7 @@ public class Dependency implements Comparable<Dependency> {
 	
 
 	/**
+	 * Håller referens till en Asset.
 	 * @return referens till en Asset.
 	 */
 	public String getId() {
@@ -47,7 +46,7 @@ public class Dependency implements Comparable<Dependency> {
 
 	/**
 	 * Sätt id manuellt.
-	 * @param id
+	 * @param id id
 	 */
 	public void setId(String id) {
 		if(id == null) {
@@ -59,6 +58,7 @@ public class Dependency implements Comparable<Dependency> {
 
 	/**
 	 *Skriver ut det unika id:t som refereras.
+	 *@return id id
 	 */
 	@Override
 	public String toString() {
@@ -67,6 +67,8 @@ public class Dependency implements Comparable<Dependency> {
 	
 	/**
 	 * id-attributet används för unikhet. 
+	 * @return objektets hash
+	 * @hidden
 	 */
 	@Override
 	public int hashCode() {
@@ -75,6 +77,7 @@ public class Dependency implements Comparable<Dependency> {
 
 	/**
 	 * Bedömer likhet genom att jämföra id:t.
+	 * @return likhetstest
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -90,6 +93,7 @@ public class Dependency implements Comparable<Dependency> {
 
 	/**
 	 *Jämför två Asset-id:n och använder det för att bedöma invärtes ordning.
+	 *@return jämförelse heltal
 	 */
 	@Override
 	public int compareTo(Dependency o) {

@@ -4,12 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import com.elofturtle.asseteer.exception.WeirdFileException;
 import com.elofturtle.asseteer.io.SBOMFileReader;
 
 class TestSBOMFileReader {
 
 	@Test
-	void testReadFromFile() {
+	void testReadFromFile() throws WeirdFileException {
 		SBOMFileReader fr = new SBOMFileReader(); 
 		String fname = "src/test/resources/sbom-reader.bom.xml";
 		var foo = fr.readFromFile(fname);

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /** 
  * Förenklad modell för beroenden från CycloneDX Security Bill of Material (SBOM). <p>
- * Tänkt att kunna läsa XML med metadata och dra ut det relevanta förutom traditionell inmatning.<p>
+ * Tänkt att kunna läsa XML med metadata och dra ut det relevanta förutom traditionell inmatning.
  */
 @JacksonXmlRootElement(localName = "SBOM")
 public class SBOM extends Asset {	

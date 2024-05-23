@@ -3,13 +3,15 @@ package com.elofturtle.asseteer.test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
+
+import com.elofturtle.asseteer.exception.WeirdFileException;
 import com.elofturtle.asseteer.io.ProgramvaraFileReader;
 import com.elofturtle.asseteer.model.Asset;
 
 class TestProgramvaraFileReader {
 
 	@Test
-	void testReadFromFile() {
+	void testReadFromFile() throws WeirdFileException {
 		var fileReader = new ProgramvaraFileReader();
 		String path = "src/test/resources/programvara-reader.xml";
 		ArrayList<Asset> programvaror;
