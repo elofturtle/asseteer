@@ -2,11 +2,11 @@ package com.elofturtle.asseteer.application;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.InputMismatchException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
+import java.util.Set;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,6 +25,9 @@ import com.elofturtle.asseteer.exception.PEBKAC;
 import com.elofturtle.asseteer.exception.WeirdFileException;
 import com.elofturtle.asseteer.io.XmlUtil;
 
+
+
+
 /**
  * Huvudprogrammet
  */
@@ -36,7 +39,7 @@ public class Asseteer {
 	/**
 	 * Tabell för omvänd sökning
 	 */
-	private Map<String, List<Dependency>> reverse_lookup;
+	private Map<String, Set<Dependency>> reverse_lookup;
 	/**
 	 * Här sparas programmets bibliotek mellan körningar
 	 */
@@ -55,6 +58,15 @@ public class Asseteer {
 		globalStateFile = path;
 		scanner = new Scanner(System.in);
 		reverse_lookup = new HashMap<>();
+		
+	}
+	
+	private void updateReverseLookup() {
+	    library.forEach(asset -> {
+	        asset.getDependencies().forEach(dependency -> {
+	            reverse_lookup.computeIfAbsent(dependency.toString(), k -> new HashSet<>()).add(new Dependency(asset));
+	        });
+	    });
 	}
 	
 	/**
@@ -68,6 +80,9 @@ public class Asseteer {
             byte[] fileBytes = Files.readAllBytes(filePath);
             String fileContent = new String(fileBytes, StandardCharsets.UTF_8);
             library = XmlUtil.deserialize(fileContent);
+            updateReverseLookup();
+            
+            
         } catch (IOException e) {
             // Handle IOException
             System.err.println("An error occurred while reading the file: " + e.getMessage());
@@ -86,8 +101,37 @@ public class Asseteer {
             e.printStackTrace();
             System.exit(1);
         }
-		
 	}
+	
+	/**
+	 * Returns a string representation of the reverse lookup map.
+	 * If a search term is provided, only keys containing the search term will be included.
+	 *
+	 * @param searchTerm The term to filter keys by. If null or empty, all keys will be included.
+	 * @return A string representation of the reverse lookup map, or an empty string if no values are found.
+	 */
+	public String getReverseLookupAsString(String searchTerm) {
+	    StringBuilder output = new StringBuilder();
+	    reverse_lookup.forEach((key, dependencies) -> {
+	        if (searchTerm == null || key.contains(searchTerm)) {
+	            output.append("Key: ").append(key).append("\n");
+	            dependencies.forEach(dependency -> output.append("\tDependency: ").append(dependency).append("\n"));
+	        }
+	    });
+	    return output.length() > 0 ? output.toString() : "";
+	}
+
+	/**
+	 * Returns a string representation of the reverse lookup map.
+	 * All keys and their corresponding dependencies will be included.
+	 *
+	 * @return A string representation of the reverse lookup map, or an empty string if no values are found.
+	 */
+	public String getReverseLookupAsString() {
+	    return getReverseLookupAsString(null);
+	}
+
+
 	
 	/**
 	 * Spara programkatalogen, t.ex. när den har ändrats
@@ -115,27 +159,6 @@ public class Asseteer {
 	}
 
 	/**
-	 * Huvudmenyval
-	 */
-	enum MENU_STATE {
-		ADD_ASSET,
-		EDIT_ASSET,
-		REMOVE_ASSET,
-		LIST_ASSETS,
-		SEARCH_ASSET,
-		QUIT;
-
-		/**
-		 *Strängrepresentation
-		 *@return sträng sträng
-		 */
-		@Override
-		public String toString() {
-			return menuRepresentation(this);
-	}
-}
-
-	/**
 	 * Huvudprogram
 	 * @param args indata
 	 * @throws PEBKAC användarfelsfel
@@ -151,7 +174,7 @@ public class Asseteer {
 		}
 		
 		while(true) {
-		        MENU_STATE choice = menuOptionHelper(MENU_STATE.values(), "### MAIN MENU ###", a.scanner); 
+		        MENU_STATE choice = MenuHelpers.menuOptionHelper(MENU_STATE.values(), "### MAIN MENU ###", a.scanner); 
 		        System.out.println("You selected: \"" + choice + "\"");
 		        
 		        switch (choice) {
@@ -169,6 +192,28 @@ public class Asseteer {
 						break;
 					case SEARCH_ASSET:
 						a.MenuOptionSearchAsset();
+						break;
+					case IMPORTERA_TILLGÅNGAR:
+						System.out.println("Inte implementerat meny ännu");
+						break;
+					case INVERTED_SEARCH:
+						System.out.println("Search term: ");
+						String searchString = a.scanner.nextLine();
+						String s = a.getReverseLookupAsString(searchString);
+						if(s.equals(""))
+							System.out.println("No results found for the search term: " + searchString);
+						else
+							System.out.println(s);
+						/*
+						 * var matchingEntries = a.reverse_lookup.entrySet().stream() .filter(entry ->
+						 * entry.getKey().contains(searchString)) .toList();
+						 * 
+						 * if (matchingEntries.isEmpty()) {
+						 * System.out.println("No results found for the search term: " + searchString);
+						 * } else { matchingEntries.forEach(entry -> { System.out.println("Key: " +
+						 * entry.getKey()); entry.getValue().forEach(dependency ->
+						 * System.out.println("  Dependency: " + dependency.toString())); }); }
+						 */
 						break;
 					case QUIT:
 						System.out.println("Exiting...");
@@ -305,15 +350,9 @@ public class Asseteer {
 	}
 
 	private void MenuOptionAddAsset() throws PEBKAC {
-		enum ASSET_TYPES{
-			PROGRAMVARA, 
-			SBOM,
-			CANCEL
-		}
-		
 		System.out.println("Add Asset");
 
-		var assetType = menuOptionHelper(ASSET_TYPES.values(), "Add asset of which type?", scanner);
+		var assetType = MenuHelpers.menuOptionHelper(ASSET_TYPES.values(), "Add asset of which type?", scanner);
 		switch(assetType) {
 		case PROGRAMVARA:
 			Programvara programvara = new Programvara();
@@ -395,28 +434,15 @@ public class Asseteer {
 			Dependency dependency = new Dependency(newdep);
 			asset.addDependency(dependency);
 			
-			// A :- B --> B :- A
-			
-			if(!reverse_lookup.containsKey(dependency.toString())) {
-				reverse_lookup.put(dependency.toString(), new ArrayList<Dependency>());
-			}
-			reverse_lookup.get(dependency.toString()).add(new Dependency(asset));
-			
 			System.out.println("Would you like to add a dependency? (y/n)");
 			addDependencyResponse = scanner.nextLine().trim().toLowerCase();
 			addDependency = addDependencyResponse.equals("y") || addDependencyResponse.equals("yes");
-
 		}
+		
+		updateReverseLookup();
 	}
 	
-	/**
-	 * Helper method transforming enum name to a nice string that can be used in menus.
-	 * @param e enum
-	 * @return ADD_ASSET --> Add asset
-	 */
-	private static String menuRepresentation(Enum<?> e) {
-		return e.name().length() == 1? e.name().toUpperCase() : e.name().substring(0, 1).toUpperCase() + e.name().substring(1).toLowerCase().replaceAll("_", " ");
-	}
+	
 	
 	/**
 	 * Standardkonstruktor
@@ -427,60 +453,4 @@ public class Asseteer {
 		scanner = new Scanner(System.in);
 	}
 
-    // GPT:s förslag E[] enumValues, hade helst velat skicka in typen istället, men orkar inte gräva just nu...
-	// Vore intressant att diskutera alternativ vid tillfälle.
-    /**
-     * Use: {@code var foo = menuOptionHelper(MY_ENUM.values(), "My Menu", scanner)}
-     * <p>
-     * This returns an actual enum value that can be used in a switch statement.
-     * <p>
-     * <pre>
-     * My Menu
-     * 1 foo
-     * 2 bar
-     * 3 baz
-     * </pre>
-     * @param <E> specific enum type
-     * @param enumValues enum values
-     * @param menuName top display 
-     * @param scanner e.g. System.in
-     * @return the specific enum value chosen
-     * @throws PEBKAC 
-     */
-    private static <E extends Enum<E>> E menuOptionHelper(E[] enumValues, String menuName, Scanner scanner) throws PEBKAC {
-        boolean validInput = false;
-        int choice = -1;
-
-        while (!validInput) {
-            System.out.println(menuName);
-            for (int i = 0; i < enumValues.length; i++) {
-                System.out.println("(" + (i + 1) + ")\t" + enumValues[i]);
-            }
-
-            try {
-                System.out.print("Enter your choice (1 to " + enumValues.length + "): ");
-                choice = scanner.nextInt();
-                scanner.nextLine();
-                choice--; // Convert to zero-based index
-
-                if (choice >= 0 && choice < enumValues.length) {
-                    validInput = true;
-                    E selectedEnum = enumValues[choice];
-                    return selectedEnum;
-                } else {
-                    System.out.println("Invalid choice. Please enter a number between 1 and " + enumValues.length + ".");
-                    throw new PEBKAC("That is not a correct choice.");
-                }
-            } catch (InputMismatchException e) {
-                if (scanner.hasNext()) {
-                    if(scanner.nextLine().equalsIgnoreCase("q")) {
-                    	System.out.println("User halted program");
-                    	System.exit(0);
-                    }
-                    throw new PEBKAC("Invalid input. Please enter an integer.", e);
-                }
-            }
-        }
-		return null;
-	    }
 	}

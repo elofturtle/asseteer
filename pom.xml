@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <!-- https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html -->
-  <!-- Kolla om det finns nya versioner av beroenden: mvnw versions:display-dependency-updates -->
+  <!-- Kolla om det finns nya versioner av beroenden: mvn versions:display-dependency-updates -->
   <!-- Kolla om det finns nya versioner för mina plguins (för maven):  mvn versions:display-dependency-updates -->
  
   <modelVersion>4.0.0</modelVersion>
@@ -87,32 +87,43 @@
   
   <build>
 	  <plugins>
-		  <plugin><!-- Kodtäckningsrapporter https://www.baeldung.com/jacoco -->
-            <groupId>org.jacoco</groupId> 
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.12</version>
-            <executions>
-               <execution>
-                  <goals>
-                     <goal>prepare-agent</goal>
-                  </goals>
-               </execution>
-               <execution>
-                  <id>report</id>
-                  <phase>prepare-package</phase>
-                  <goals>
-                     <goal>report</goal>
-                  </goals>
-               </execution>
-            </executions>
-            <configuration>
-		        <excludes>
-		            <exclude>**/*Test.class</exclude> <!-- Slippa göra tester för testerna för testerna för testerna... -->
-		            <exclude>**/Test*.class</exclude> 
-		            <exclude>**/Asseteer.class</exclude> <!-- "Main menu"-klass -->
-		        </excludes>
-		    </configuration>
-		  </plugin>
+		  <plugin>
+	        <artifactId>maven-surefire-plugin</artifactId>
+	        <version>2.19.1</version>
+	        <dependencies>
+	            <dependency>
+	                <groupId>org.junit.platform</groupId>
+	                <artifactId>junit-platform-surefire-provider</artifactId>
+	                <version>1.1.0</version>
+	            </dependency>
+	        </dependencies>
+		</plugin>
+	  <plugin><!-- Kodtäckningsrapporter https://www.baeldung.com/jacoco -->
+        <groupId>org.jacoco</groupId> 
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.12</version>
+        <executions>
+           <execution>
+              <goals>
+                 <goal>prepare-agent</goal>
+              </goals>
+           </execution>
+           <execution>
+              <id>report</id>
+              <phase>prepare-package</phase>
+              <goals>
+                 <goal>report</goal>
+              </goals>
+           </execution>
+        </executions>
+        <configuration>
+	        <excludes>
+	            <exclude>**/*Test.class</exclude> <!-- Slippa göra tester för testerna för testerna för testerna... -->
+	            <exclude>**/Test*.class</exclude> 
+	            <exclude>**/Asseteer.class</exclude> <!-- "Main menu"-klass -->
+	        </excludes>
+	    </configuration>
+	  </plugin>
 
         <plugin> <!-- Generar en HTML-sida av min MD-fil, 
         			men hanterar inte andra resurser, som bilder

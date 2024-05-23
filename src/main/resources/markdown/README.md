@@ -1,5 +1,8 @@
 # asseteer
 Lightweight Asset Management
+
+Se vidare https://elofturtle.github.io/asseteer-pages/ 
+
 Projektförslag, tänkt att pågå så långt vi hinner, kanske genom forsätningskursen.
 # Deltagare
 elofturtle
@@ -85,3 +88,121 @@ Nej, gpt:s forte verkar inte vara den sortens kodanalys.
 I eclipse verkar stödet halvt försvunnit, så numera är det kanske främst kommersiella alternativ som gäller. 
 
 Om man nu inte går all in och installerar Papyrus.
+
+# Hur projektet faktiskt ser ut
+```mermaid
+classDiagram
+direction BT
+class Asset {
+  + Asset(String, ArrayList~Dependency~) 
+  + Asset() 
+  + Asset(String) 
+  + setName(String) void
+  + getAssetType() String
+  + setId(String) void
+  + getDependencies() ArrayList~Dependency~
+  + setImportant(boolean) void
+  + getName() String
+  + setIdFromDeserialization(String) void
+  + removeDependency(Asset) void
+  + addDependency(Dependency) void
+  + addDependency(Asset) void
+  + toString() String
+  + toRepresentation() String
+  + equals(Object) boolean
+  + hashCode() int
+  + getId() String
+  + isImportant() boolean
+  + setDependencies(ArrayList~Dependency~) void
+  + compareTo(Asset) int
+  + setAssetType() void
+  + removeDependency(Dependency) void
+  + toDependency() Dependency
+}
+class AssetFileReader {
+  + AssetFileReader() 
+  + readFromFile(String) ArrayList~Asset~
+}
+class Asseteer {
+  + Asseteer(String) 
+  + Asseteer() 
+  + Scanner scanner
+  + readState() void
+  + main(String[]) void
+  + saveState() void
+}
+class Dependency {
+  + Dependency(Asset) 
+  + Dependency() 
+  + Dependency(String) 
+  + getId() String
+  + hashCode() int
+  + equals(Object) boolean
+  + setId(String) void
+  + compareTo(Dependency) int
+  + toString() String
+}
+class PEBKAC {
+  + PEBKAC(String, Throwable) 
+  + PEBKAC(String) 
+  + PEBKAC() 
+  + PEBKAC(Throwable) 
+  + PEBKAC(String, Throwable, boolean, boolean) 
+}
+class Programvara {
+  + Programvara(String, String, String, String) 
+  + Programvara(String, ArrayList~Dependency~) 
+  + Programvara(String, String, String, String, ArrayList~Dependency~) 
+  + Programvara() 
+  + Programvara(String) 
+  + setVersion(String) void
+  + setName(String) void
+  + getVersion() String
+  + getÄgare() String
+  + setÄgare(String) void
+  + getLeverantör() String
+  + setLeverantör(String) void
+}
+class ProgramvaraFileReader {
+  + ProgramvaraFileReader() 
+  + readFromFile(String) ArrayList~Asset~
+}
+class SBOM {
+  + SBOM(String, String) 
+  + SBOM() 
+}
+class SBOMFileReader {
+  + SBOMFileReader() 
+  + readFromFile(String) ArrayList~Asset~
+}
+class WeirdFileException {
+  + WeirdFileException() 
+  + WeirdFileException(String, Throwable) 
+  + WeirdFileException(String, Throwable, boolean, boolean) 
+  + WeirdFileException(Throwable) 
+  + WeirdFileException(String) 
+}
+class XmlUtil {
+  + XmlUtil() 
+  + serialize(ArrayList~Asset~) String
+  + deserialize(String) ArrayList~Asset~
+}
+
+Asset  ..>  Dependency : «create»
+AssetFileReader  ..>  PEBKAC : «create»
+Asseteer  ..>  Dependency : «create»
+Asseteer  ..>  PEBKAC : «create»
+Asseteer  ..>  Programvara : «create»
+Asseteer  ..>  SBOM : «create»
+Asseteer  ..>  WeirdFileException : «create»
+Programvara  -->  Asset 
+ProgramvaraFileReader  -->  AssetFileReader 
+ProgramvaraFileReader  ..>  Dependency : «create»
+ProgramvaraFileReader  ..>  Programvara : «create»
+ProgramvaraFileReader  ..>  WeirdFileException : «create»
+SBOM  -->  Asset 
+SBOMFileReader  -->  AssetFileReader 
+SBOMFileReader  ..>  Dependency : «create»
+SBOMFileReader  ..>  SBOM : «create»
+SBOMFileReader  ..>  WeirdFileException : «create»
+```

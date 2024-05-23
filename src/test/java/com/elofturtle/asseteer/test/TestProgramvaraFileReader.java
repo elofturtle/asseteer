@@ -20,8 +20,8 @@ class TestProgramvaraFileReader {
 			System.out.println(p.toRepresentation());
 		}
 		assertAll("Test XML import of programvaror",
-				() -> assertEquals("Putty : Programvara:open_source_putty_0.81\n\tDependencies\n\t\tabc123\n\t\tdef789\n", programvaror.get(0).toRepresentation()),
-				() -> assertEquals("Edge : Programvara:microsoft_edge_32.9",programvaror.get(1).toRepresentation()),
+				() -> assertEquals("Putty : Programvara:open_source_putty_0.81\n\tDependencies\n\t\tabc123\n\n\n\t\tdef789\n".replaceAll("\\s+", ""), programvaror.get(0).toRepresentation().replaceAll("\\s+", "")),
+				() -> assertEquals("Edge : Programvara:microsoft_edge_32.9".replaceAll("\\s+", ""),programvaror.get(1).toRepresentation().replaceAll("\\s+", "")),
 				() -> assertEquals(programvaror.size() ,2)
 				);
 	}

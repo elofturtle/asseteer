@@ -19,10 +19,12 @@ class TestXmlUtil {
 		            // Create SBOM instances
 		            SBOM sbom1 = new SBOM("c", "pkg:ab/c@1");
 		            SBOM sbom2 = new SBOM("d", "pkg:ab/d@3");
+		            
 
 		            // Create Programvara instance
 		            Programvara programvara = new Programvara("Putty", "Leif B Nilsson", "0.81.0", "Open Source");
-
+		            programvara.addDependency(sbom1);
+		            programvara.addDependency(sbom2);
 		            // Add instances to the list
 		            ArrayList<Asset> library = new ArrayList<>();
 		            library.add(sbom1);
@@ -38,18 +40,28 @@ class TestXmlUtil {
 		                    "    <assetType>SBOM</assetType>\n" +
 		                    "    <name>c</name>\n" +
 		                    "    <id>SBOM:pkg:ab/c@1</id>\n" +
+		                    "    <dependencies/>" +
 		                    "    <important>false</important>\n" +
 		                    "  </item>\n" +
 		                    "  <item>\n" +
 		                    "    <assetType>SBOM</assetType>\n" +
 		                    "    <name>d</name>\n" +
 		                    "    <id>SBOM:pkg:ab/d@3</id>\n" +
+		                    "    <dependencies/>" +
 		                    "    <important>false</important>\n" +
 		                    "  </item>\n" +
 		                    "  <item>\n" +
 		                    "    <assetType>Programvara</assetType>\n" +
 		                    "    <name>Putty</name>\n" +
 		                    "    <id>Programvara:open_source_putty_0.81.0</id>\n" +
+		                    "    <dependencies>" +
+		                    "      <dependencies>" +
+		                    "        <id>SBOM:pkg:ab/c@1</id>" +
+		                    "      </dependencies>" +
+		                    "      <dependencies>" +
+		                    "        <id>SBOM:pkg:ab/d@3</id>" +
+		                    "      </dependencies>" +
+		                    "    </dependencies>" +
 		                    "    <important>true</important>\n" +
 		                    "    <ägare>Leif B Nilsson</ägare>\n" +
 		                    "    <version>0.81.0</version>\n" +
@@ -60,6 +72,7 @@ class TestXmlUtil {
 		            System.out.println(xml);
 
 		            // Compare the XML output with the expected XML
+
 		            assertEquals(expectedXML.replaceAll("\\s+", ""), xml.replaceAll("\\s+", ""));
 		        } catch (JsonProcessingException e) {
 		            e.printStackTrace();

@@ -143,6 +143,8 @@ public abstract class Asset implements Comparable<Asset> {
 	 * @return en referens till kända beroenden.
 	 */
 	public ArrayList<Dependency> getDependencies() {
+		if(dependencies == null)
+			dependencies = new ArrayList<>();
 		return dependencies;
 	}
 
