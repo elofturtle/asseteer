@@ -14,6 +14,17 @@ Resultatet *asseteer-<version>.jar* skapas i katalogen  _target_
 ```bash
 mvn package # kompilerar och kör tester
 ```
+
+För att bygga den inbyggda webbplatsen med information för utvecklaren så använder du
+
+```bash
+mvn site
+```
+
+Det skapar en katalog  _site_ utanför projektroten, som sedan kan publiceras om så önskas.
+
+Observera att genereringen av siten ännu inte är helt felfri :)
+
 ## Starta Asseteer
 Det är en CLI-applikation och du behöver ha Java 21 eller senare installerat i förväg.
 
