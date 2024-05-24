@@ -1,9 +1,49 @@
-# asseteer
+# Asseteer
 Lightweight Asset Management
 
 Se vidare https://elofturtle.github.io/asseteer-pages/ 
 
-Projektförslag, tänkt att pågå så långt vi hinner, kanske genom forsätningskursen.
+# Kom igång
+## Bygg projektet
+Projektet använder maven för beroendehantering.
+
+Du behöver installera maven på egen hand, men resten av beroendena tas om hand av maven.
+
+Resultatet *asseteer-<version>.jar* skapas i katalogen  _target_
+
+```bash
+mvn package # kompilerar och kör tester
+```
+## Starta Asseteer
+Det är en CLI-applikation och du behöver ha Java 21 eller senare installerat i förväg.
+
+Om du står i projekt-roten startar du programmet med
+
+```bash
+java -jar ./target/asseteer-<version>.jar
+```
+
+Du kan behöva justera sökvägen annars.
+
+När du starta programmet så ska det se ut ungefär enligt nedan:
+
+```bash
+Administratör@INV001000112384 MINGW64 ~/git/asseteer (main)
+$ java -jar  target/asseteer-0.5.0.jar
+### MAIN MENU ###
+(1)     Add asset
+(2)     Edit asset
+(3)     Remove asset
+(4)     List assets
+(5)     Search asset
+(6)     Inverted search
+(7)     Importera tillg▒ngar
+(8)     Hj▒lp
+(9)     Quit
+Enter your choice (1 to 9):
+
+```
+
 # Deltagare
 elofturtle
 produktpelle

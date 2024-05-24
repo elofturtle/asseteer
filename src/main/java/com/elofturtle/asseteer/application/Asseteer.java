@@ -204,16 +204,9 @@ public class Asseteer {
 							System.out.println("No results found for the search term: " + searchString);
 						else
 							System.out.println(s);
-						/*
-						 * var matchingEntries = a.reverse_lookup.entrySet().stream() .filter(entry ->
-						 * entry.getKey().contains(searchString)) .toList();
-						 * 
-						 * if (matchingEntries.isEmpty()) {
-						 * System.out.println("No results found for the search term: " + searchString);
-						 * } else { matchingEntries.forEach(entry -> { System.out.println("Key: " +
-						 * entry.getKey()); entry.getValue().forEach(dependency ->
-						 * System.out.println("  Dependency: " + dependency.toString())); }); }
-						 */
+						break;
+					case HJÄLP:
+						//TODO !!!
 						break;
 					case QUIT:
 						System.out.println("Exiting...");
