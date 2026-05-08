@@ -148,7 +148,7 @@
         <plugin> <!-- Kopiera filer (det som markdown-pluginet inte gör) https://maven.apache.org/plugins/maven-resources-plugin/ -->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-resources-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>3.5.0</version>
             <executions> <!-- Man kan köra flera olika executions
             					En till varje outptut directory
             					-->
