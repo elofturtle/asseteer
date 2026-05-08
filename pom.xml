@@ -30,7 +30,7 @@
 					-->
 	  	<groupId>org.cyclonedx</groupId>
 	  	<artifactId>cyclonedx-core-java</artifactId> 
-	  	<version>9.0.0</version>
+	  	<version>11.0.1</version>
 	 </dependency>
 	<dependency><!--https://junit.org/junit5/docs/current/user-guide/-->
 	    <groupId>org.junit.jupiter</groupId> 
