@@ -35,7 +35,7 @@
 	<dependency><!--https://junit.org/junit5/docs/current/user-guide/-->
 	    <groupId>org.junit.jupiter</groupId> 
 	    <artifactId>junit-jupiter-api</artifactId>
-	    <version>5.11.0-M2</version>
+	    <version>6.1.0-RC1</version>
 	    <scope>test</scope> <!-- Behövs bara under tester https://www.baeldung.com/maven-dependency-scopes -->
 	 </dependency>
 		 <dependency><!--https://junit.org/junit5/docs/current/user-guide/-->
